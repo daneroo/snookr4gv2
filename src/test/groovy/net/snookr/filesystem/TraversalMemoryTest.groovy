@@ -18,7 +18,7 @@ import static org.junit.Assert.*;
  * @author daniel
  */
 public class TraversalMemoryTest {
-    File baseDir = new File("/Volumes/DarwinScratch/photo/");
+    File baseDir = new File("/Volumes/DarwinTime/archive/media/photo/");
     long startTime;
     long startMem;
     public TraversalMemoryTest() {
