@@ -16,6 +16,8 @@ as in:
 
     gradle installApp
     time ./build/install/bin/snookr4gv2 --fs2json /Volumes/DarwinTime/archive/media/photo/
+    # or
+    time ./build/install/bin/snookr4gv2 --push /Volumes/DarwinTime/archive/media/photo/
 
 
 ## Setup
