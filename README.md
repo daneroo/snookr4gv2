@@ -19,6 +19,17 @@ as in:
     # or
     time ./build/install/bin/snookr4gv2 --push /Volumes/DarwinTime/archive/media/photo/
 
+## Docker
+Had to start from a gradle image: `niaquinto/gradle`, but had to downgrade to `java:6-jdk` as a base image.
+This is because we need deprecated: `com.sun.image.codec.jpeg.JPEGDecodeParam`, used from `JpegMetadataReader.readMetadata`.
+
+The new version of graddle builds a bit differntly.
+
+    docker build  -t daneroo/gradle .
+    docker run --rm -it -v `pwd`:/usr/src/app:rw --entrypoint bash daneroo/gradle
+    gradle clean installApp
+    ./build/install/bin/app --fli2db
+
 
 ## Setup
 On OSX, 
