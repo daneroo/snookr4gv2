@@ -44,6 +44,8 @@ public class Main {
     public static void main(String[] args) {
         Main m = new Main();
 
+        System.out.println("Hello "+System.getenv("FLICKR_USER_ID")+"!");
+
         // These were ongoing experiments with CloudMap, CloudZip
         if (false) {
             //m.readWriteJSON();
