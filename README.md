@@ -1,5 +1,8 @@
 # Snookr for Groovy v2
 
+2015-11-12: Dockerizing, and upgrading to OAuth. Need to add GET/PUT to Flickr.groovy.get|post, and update inject and sign methods.
+
+
 Moved from Google Code
 
 Wrote the build with [gradle](http://www.gradle.org/documentation)
