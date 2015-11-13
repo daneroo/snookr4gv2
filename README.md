@@ -28,10 +28,12 @@ This is because we need deprecated: `com.sun.image.codec.jpeg.JPEGDecodeParam`, 
 
 The new version of graddle builds a bit differntly.
 
+    // the name is derived from the directory name, hence app, instead of snookr4gv2
     docker build  -t daneroo/gradle .
     docker run --rm -it -v `pwd`:/usr/src/app:rw --entrypoint bash daneroo/gradle
     gradle clean installApp
     ./build/install/bin/app --fli2db
+    ./build/install/bin/app --push ./imageExistTest/
 
 
 ## Setup

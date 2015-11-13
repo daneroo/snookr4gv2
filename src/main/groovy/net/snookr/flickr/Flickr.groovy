@@ -2,6 +2,7 @@ package net.snookr.flickr;
 
 import net.snookr.util.Environment;
 import net.snookr.util.MD5;
+import net.snookr.util.SHA1;
 
 class Flickr {
 
@@ -51,18 +52,22 @@ class Flickr {
     String getEcho(Map params) {
         return get(inject(params,["method":"flickr.test.echo"]))
     }
+    String testLogin() {
+        def noparams = [:]
+        return get(inject(noparams,["method":"flickr.test.login"]))
+    }
 
-    // injects api_key and auth_token
+    // injects oauth_consumer_key and oauth_token
     // sign the request
     // subit with http get:
     String get(Map params) {
-        return new REST().get(sign(injectApiAndToken(params)));
+        return new REST().get(sign("GET",REST.urlBase,injectApiAndToken(params)));
     }
     String post(Map params) {
-        return new REST().post(sign(injectApiAndToken(params)));
+        return new REST().post(sign("POST",REST.urlBase,injectApiAndToken(params)));
     }
     String postMultipart(Map params) {
-        return new REST().postMultipart(sign(injectApiAndToken(params)));
+        return new REST().postMultipart(sign("POST",REST.urlUpload,injectApiAndToken(params)));
     }
 
 
@@ -70,9 +75,22 @@ class Flickr {
     // Below are internal private implementations
     //////////////////////////////////////////////
 
-    // copy params and override with api_key, and auth_token
+    // copy params and override with oauth_consumer_key, and oauth_token
+    // also add oauth_timestamp, and oauth_nonce
     private Map injectApiAndToken(Map params) {
-        return inject(params,["api_key":Environment.api_key,"auth_token":Environment.auth_token]);
+        // var timestamp = "" + Date.now(),
+        String timestamp = ""+System.currentTimeMillis();
+        //timestamp="1447435358763";
+        String nonce = MD5.digest(timestamp)
+        return inject(params,[
+            //"format": "json",
+            "api_key": Environment.api_key,
+            "oauth_consumer_key": Environment.api_key,
+            "oauth_token": Environment.access_token,
+            "oauth_timestamp": timestamp,
+            "oauth_nonce": nonce,
+            "oauth_signature_method": "HMAC-SHA1"
+            ]);
     }
     
     // make a copy of map m1, with map m2 added on top
@@ -84,13 +102,76 @@ class Flickr {
         return resultMap;
     }
 
+    // performs flickr signature by injecting oauth_signature into params map
+    //  -returns a copy of tha map , as per inject behaviour
+    // add a way to exclude some (one) parameter ('photo') for upload
+    // depends on Environment.secret, and Environment.access_token_secret,
+    // which are currently negotiated outside and set in Environment
+    // does not sign a parameter named 'photo'
+    private Map sign(String verb,String url,Map params) {
+        // maks a list : [key1,value1,key2,value2]
+        // sorted by key names
+        //printMap("-Sign",params);
+        String queryString = formQueryString(params);
+        String data = formBaseString("GET", url, queryString);
+        String hmacKey = Environment.secret+'&'+Environment.access_token_secret;
+        String signature = SHA1.calculateRFC2104HMAC(data,hmacKey);
+        def signed =  inject(params,["oauth_signature":signature]);
+        printMap("+Sign",signed);
+        return signed;
+    }
+
+    private String printMap(String name,Map params) {
+        System.out.println(name+":");
+
+        params.keySet().sort().each() {
+            if ("photo"==it) return;
+            System.out.println("  "+it+": "+params.get(it));
+        }
+    }
+
+    private static String formQueryString(Map params) {
+        // makes a list : ["key1=value1","key2=value2"]
+        // where values are URI encoded
+        // then return the sorted list, joined by '&'
+        def sortedArgs = []; // List of sorted param names, and values
+        params.keySet().each() {
+            if ("photo"==it) return;
+            sortedArgs << it+"="+encodeURIComponent(params.get(it));
+        }
+        sortedArgs.sort(); // mutates the array
+        return sortedArgs.join("&");
+    }
+
+    // Turn a url + query string into a Flickr API "base string".
+    private static String formBaseString(verb,url,queryString) {
+      return [verb, encodeURIComponent(url), encodeURIComponent(queryString)].join("&");  
+    }
+
+    // from https://gist.github.com/declanqian/7892516
+    private static String encodeURIComponent(String component) {
+        String result = null;
+
+        try {
+            result = URLEncoder.encode(component, "UTF-8")
+                .replaceAll("\\%28", "(")
+                .replaceAll("\\%29", ")")
+                .replaceAll("\\+", "%20")
+                .replaceAll("\\%27", "'")
+                .replaceAll("\\%21", "!")
+                .replaceAll("\\%7E", "~");
+        } catch (UnsupportedEncodingException e) {
+            result = component;
+        }
+        return result;
+    }
     // performs flickr signature by injecting api_sig into map
     //  -returns a copy of tha map , as per inject behaviour
     //   could just ad to the passed Map...
     // add a way to exclude some (one) parameter ('photo') for upload
     // depends on secret
     // does not sign a parameter named 'photo'
-    private Map sign(Map params) {
+    private Map oldSign(Map params) {
         // maks a list : [key1,value1,key2,value2]
         // sorted by key names
         def sorted = []; // List of sorted param names, and values

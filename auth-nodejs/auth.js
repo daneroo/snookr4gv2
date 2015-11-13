@@ -1,42 +1,42 @@
 var Flickr = require("flickrapi");
 var flickrOptions = {
-  api_key: "efdee6ab4e6cb1a625bd30a67e2d0924",
-  secret: "f84d041e2f7bb76a",
+  api_key: process.env.FLICKR_API_KEY,
+  secret: process.env.FLICKR_SECRET,
   // copy the values here after the first run, or export as instruction state
-  user_id: "" || process.env.FLICKR_USER_ID,
-  access_token: "" || process.env.FLICKR_ACCESS_TOKEN,
-  access_token_secret: "" || process.env.FLICKR_ACCESS_TOKEN_SECRET
+  user_id: process.env.FLICKR_USER_ID,
+  access_token: process.env.FLICKR_ACCESS_TOKEN,
+  access_token_secret: process.env.FLICKR_ACCESS_TOKEN_SECRET,
+  permissions: 'write' // read,write or delete : default if not set is read
 };
 
 var log = console.log;
 
-log('flickrOptions', flickrOptions);
+if (!flickrOptions.api_key || !flickrOptions.secret) {
+  log('Provide at least Application tokens: FLICKR_API_KEY, FLICKR_SECRET');
+  log('  Application API keypair: https://www.flickr.com/services/api/keys/');
+  process.exit(-1);
+
+}
+log('flickrOptions: ', JSON.stringify(flickrOptions, null, 2));
 
 Flickr.authenticate(flickrOptions, function(error, flickr) {
   if (error) {
     log('error', error);
     process.exit(-1);
   }
-  log('Looks good');
-  // log('flickr', flickr);
+  log('Looks good we are authenticated');
 
-  // we can now use "flickr" as our API object,
-  // but we can only call public methods and access public data
-  flickr.people.getPhotos({
+  // now validate the permissions
+  flickr.auth.oauth.checkToken({
     api_key: flickrOptions.api_key,
-    user_id: '43605851@N00',
-    authenticated: true,
-    page: 1,
-    per_page: 2
+    oauth_token: flickrOptions.access_token
   }, function(err, result) {
-    /*
-      This will give public results only, even if we used
-      Flickr.authenticate(), because the function does not
-      *require* authentication to run. It just runs with
-      fewer permissions.
-    */
-    log('err', err);
-    log('result', JSON.stringify(result, null, 2));
+    if (error) {
+      log('checkToken:error', error);
+      process.exit(-1);
+    }
+    // log('result', JSON.stringify(result, null, 2));
+    log ('user: %j has permissions: %s',result.oauth.user,result.oauth.perms._content);
     process.exit(0);
   });
 

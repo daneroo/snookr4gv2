@@ -1,9 +1,9 @@
 package net.snookr.flickr;
 
 class REST {
-    String host = "www.flickr.com"; // ?port
-    String urlBase = "http://${host}/services/rest/";
-    String urlUpload = "http://${host}/services/upload/";
+    static String host = "www.flickr.com"; // ?port
+    static String urlBase = "https://${host}/services/rest/";
+    static String urlUpload = "https://${host}/services/upload/";
     //String urlBase = "http://boole:8080/solocorp/inspect.jsp";
 
     boolean debug=true;

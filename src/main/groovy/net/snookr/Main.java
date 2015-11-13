@@ -28,6 +28,7 @@ import net.snookr.synch.ClearFlickrDB;
 import net.snookr.util.Exif;
 import net.snookr.util.MD5;
 import net.snookr.util.SHA1;
+import net.snookr.util.Environment;
 import net.snookr.synch.Filesystem2JSON;
 import net.snookr.synch.ScalrTest;
 import net.snookr.transcode.PartitionFSImage;
@@ -45,18 +46,7 @@ public class Main {
     public static void main(String[] args) {
         Main m = new Main();
 
-        try {
-        String data="GET&https%3A%2F%2Fapi.flickr.com%2Fservices%2Frest%2F&api_key%3Defdee6ab4e6cb1a625bd30a67e2d0924%26authenticated%3Dtrue%26format%3Djson%26method%3Dflickr.people.getPhotos%26oauth_consumer_key%3Defdee6ab4e6cb1a625bd30a67e2d0924%26oauth_nonce%3D9bebb73e60f0cc0949c34928d0b978cf%26oauth_signature_method%3DHMAC-SHA1%26oauth_timestamp%3D1447313135789%26oauth_token%3D72157661104043075-a57c20a5531f62e8%26page%3D1%26per_page%3D2%26user_id%3D43605851%2540N00";
-        String hmacKey="f84d041e2f7bb76a&344b992aced4593f";
-        String expectedSignature="7NTbtIuSx3Ex/F9Yz/72fD1aNxM=";
-        String signature = SHA1.calculateRFC2104HMAC(data,hmacKey);
-        System.out.println("DATA: "+data);
-        System.out.println("KEY:  "+hmacKey);
-        
-        System.out.println("-DIG: "+expectedSignature);
-        System.out.println("+DIG: "+signature);
-        System.out.println("Hello "+System.getenv("FLICKR_USER_ID")+"!");
-        } catch (Exception e) { /* do nothing */ }
+        Environment.print();
 
         // These were ongoing experiments with CloudMap, CloudZip
         if (false) {
