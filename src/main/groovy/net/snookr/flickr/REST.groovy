@@ -3,8 +3,7 @@ package net.snookr.flickr;
 class REST {
     static String host = "www.flickr.com"; // ?port
     static String urlBase = "https://${host}/services/rest/";
-    static String urlUpload = "https://${host}/services/upload/";
-    //String urlBase = "http://boole:8080/solocorp/inspect.jsp";
+    static String urlUpload = "https://up.flickr.com/services/upload/";
 
     boolean debug=true;
     String get(Map params) {
@@ -106,6 +105,8 @@ class REST {
                 bout.close()
                 return baos.toString();
                 
+            } catch (Exception e) {
+                println e;                
             } finally {
                 is?.close(); // what about IOException
             }

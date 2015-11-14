@@ -46,7 +46,7 @@ public class Main {
     public static void main(String[] args) {
         Main m = new Main();
 
-        Environment.print();
+        Environment.check();
 
         // These were ongoing experiments with CloudMap, CloudZip
         if (false) {

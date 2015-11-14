@@ -1,5 +1,5 @@
 build
 .gradle
-src/main/groovy/net/snookr/util/Environment.groovy
+snookr.yap*
 # This is where I'll hold the SEKRET Credentials, and auth tokens
 ENV.sh

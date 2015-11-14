@@ -19,7 +19,7 @@ class Flickr {
         def baos = new ByteArrayOutputStream();
         baos << f.newInputStream(); /* not sure InputStream is closed...*/
         byte[] b = baos.toByteArray();
-        return postMultipart(["title":f.getName(),"photo":b,"tags":"snookrd ${md5tag}"])
+        return postMultipart(["title":f.getName(),"photo":b,"tags":"\"snookrd\" \"${md5tag}\""])
     }
     String setPostedDate(String photoid,Date posted) { // Does this imply a Timezone! works for me
         long postedSecs = posted.getTime()/1000l;
@@ -78,9 +78,7 @@ class Flickr {
     // copy params and override with oauth_consumer_key, and oauth_token
     // also add oauth_timestamp, and oauth_nonce
     private Map injectApiAndToken(Map params) {
-        // var timestamp = "" + Date.now(),
         String timestamp = ""+System.currentTimeMillis();
-        //timestamp="1447435358763";
         String nonce = MD5.digest(timestamp)
         return inject(params,[
             //"format": "json",
@@ -113,11 +111,12 @@ class Flickr {
         // sorted by key names
         //printMap("-Sign",params);
         String queryString = formQueryString(params);
-        String data = formBaseString("GET", url, queryString);
+        String data = formBaseString(verb, url, queryString);
         String hmacKey = Environment.secret+'&'+Environment.access_token_secret;
         String signature = SHA1.calculateRFC2104HMAC(data,hmacKey);
+        //printMap("-Sign",["data":data,"hmacKey":hmacKey,"digest":signature]);
         def signed =  inject(params,["oauth_signature":signature]);
-        printMap("+Sign",signed);
+        //printMap("+Sign",signed);
         return signed;
     }
 
@@ -165,23 +164,5 @@ class Flickr {
         }
         return result;
     }
-    // performs flickr signature by injecting api_sig into map
-    //  -returns a copy of tha map , as per inject behaviour
-    //   could just ad to the passed Map...
-    // add a way to exclude some (one) parameter ('photo') for upload
-    // depends on secret
-    // does not sign a parameter named 'photo'
-    private Map oldSign(Map params) {
-        // maks a list : [key1,value1,key2,value2]
-        // sorted by key names
-        def sorted = []; // List of sorted param names, and values
-        params.keySet().sort().each() {
-            if ("photo"==it) return;
-            sorted << it; 
-            sorted << params.get(it);
-        }
-        return inject(params,["api_sig":MD5.digest(Environment.secret+sorted.join(""))]);
-    }
-
     
 }
