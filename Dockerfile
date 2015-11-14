@@ -1,8 +1,10 @@
 FROM java:6-jdk
 MAINTAINER Daniel Lauzon <daniel.lauzon@gmail.com>
-#FROM java:8-jdk
-#MAINTAINER Nicholas Iaquinto <nickiaq@gmail.com>
 
+# This was modified from: niaquinto/gradle by Nicholas Iaquinto <nickiaq@gmail.com>
+
+# Use local time: for fixing dates!
+RUN ln -sf /usr/share/zoneinfo/Canada/Eastern /etc/localtime
 
 # Gradle
 ENV GRADLE_VERSION 2.7
@@ -27,7 +29,9 @@ VOLUME /root/.gradle/caches
 
 # Default command is "/usr/bin/gradle -version" on /usr/bin/app dir
 # (ie. Mount project at /usr/bin/app "docker --rm -v /path/to/app:/usr/bin/app gradle <command>")
-VOLUME /usr/bin/app
-WORKDIR /usr/bin/app
-ENTRYPOINT gradle
-CMD -version
+VOLUME /usr/src/app
+WORKDIR /usr/src/app
+
+ENTRYPOINT bash
+#ENTRYPOINT gradle
+#CMD -version
