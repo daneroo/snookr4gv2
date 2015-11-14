@@ -39,6 +39,12 @@ The new version of graddle builds a bit differntly.
     ./build/install/snookr4gv2/bin/snookr4gv2 --fli2db
     ./build/install/snookr4gv2/bin/snookr4gv2 --push ./imageExistTest/
 
+### Mounting files in boot2docker outside /Users
+
+    docker-machine ssh dev
+    root@dev:~# mkdir /archive
+    root@dev:~# mount -t vboxsf -o uid=1000,gid=50 archive /archive
+
 
 ## Setup
 On OSX, 
