@@ -1,5 +1,6 @@
 # Snookr for Groovy v2
 
+2015-11-13: Figured out how to re-install JDK6 on OSX
 2015-11-12: Dockerizing, and upgrading to OAuth. Need to add GET/PUT to Flickr.groovy.get|post, and update inject and sign methods.
 
 
