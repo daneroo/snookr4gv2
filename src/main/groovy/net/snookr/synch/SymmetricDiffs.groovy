@@ -22,7 +22,7 @@ class SymmetricDiffs  implements Runnable {
         baseDir = aBaseDir;
     }
     public void run() {
-        def verbose=false;
+        def verbose=true;
         println "Hello Symmetric Diffs"
         if (baseDir==null) {
             println "No baseDir specified"
@@ -129,7 +129,7 @@ class SymmetricDiffs  implements Runnable {
                     println "new photoid: ${nuPhotoid} uploaded in ${elapsedms/1000f}s.";
                      */
                 } else {
-                    println "Missing file not found in filesystem. cannot upload";
+                    println "Missing file not found in filesystem. cannot upload fn:${fileName} md5:${fsima.md5}";
                 }
 
             }

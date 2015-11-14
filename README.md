@@ -17,7 +17,7 @@ to distribute: `gradle distZip`
 
 as in:
 
-    gradle installDist
+    gradle clean installDist
     time ./build/install/snookr4gv2/bin/snookr4gv2 --fs2json /Volumes/DarwinTime/archive/media/photo/
     # or
     time ./build/install/snookr4gv2/bin/snookr4gv2 --push /Volumes/DarwinTime/archive/media/photo/
@@ -41,5 +41,18 @@ The new version of graddle builds a bit differntly.
 
 ## Setup
 On OSX, 
- 
+  ** actually I don't think I need groovy... **
     brew install groovy gradle
+
+### Install legacy JDK6 for OSX
+I had also installed the current jdk8, but this is the path to jdk6
+
+    https://support.apple.com/kb/DL1572?locale=en_US
+
+To list available versions"
+
+     /usr/libexec/java_home -V
+
+To use jdk6:
+
+    export JAVA_HOME=`/usr/libexec/java_home -v 1.6`
