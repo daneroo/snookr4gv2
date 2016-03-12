@@ -1,0 +1,2 @@
+
+time java -jar snookr4gv2.jar --push /archive/media/photo/
