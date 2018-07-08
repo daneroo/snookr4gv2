@@ -6,6 +6,9 @@ MAINTAINER Daniel Lauzon <daniel.lauzon@gmail.com>
 # Use local time: for fixing dates!
 RUN ln -sf /usr/share/zoneinfo/Canada/Eastern /etc/localtime
 
+# DL 2018-07-08 update certs : didn't work, JAVA has it's own certs?
+RUN update-ca-certificates --fresh
+
 # Gradle
 ENV GRADLE_VERSION 2.7
 ENV GRADLE_HASH fe801ce2166e6c5b48b3e7ba81277c41

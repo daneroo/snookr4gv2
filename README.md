@@ -30,21 +30,16 @@ Had to start from a gradle image: `niaquinto/gradle`, but had to downgrade to `j
 This is because we need deprecated: `com.sun.image.codec.jpeg.JPEGDecodeParam`, used from `JpegMetadataReader.readMetadata`.
 
 The new version of graddle builds a bit differntly.
-
-    // the name is derived from the directory name, hence app, instead of snookr4gv2
-    docker build  -t daneroo/gradle .
-    docker run --rm -it -v `pwd`:/usr/src/app:rw daneroo/gradle
-    gradle clean installDist
-     . ENV.sh 
-    ./build/install/snookr4gv2/bin/snookr4gv2 --fli2db
-    ./build/install/snookr4gv2/bin/snookr4gv2 --push ./imageExistTest/
-
-### Mounting files in boot2docker outside /Users
-
-    docker-machine ssh dev
-    root@dev:~# mkdir /archive
-    root@dev:~# mount -t vboxsf -o uid=1000,gid=50 archive /archive
-
+```
+// the name is derived from the directory name, hence app, instead of snookr4gv2
+docker build  -t daneroo/gradle .
+docker run --rm -it -v `pwd`:/usr/src/app:rw -v /Volumes/Space/archive:/archive daneroo/gradle
+gradle clean installDist
+. ENV.sh 
+./build/install/snookr4gv2/bin/snookr4gv2 --fli2db
+./build/install/snookr4gv2/bin/snookr4gv2 --push /archive/media/photo/
+./build/install/snookr4gv2/bin/snookr4gv2 --push ./imageExistTest/
+```
 
 ## Setup
 On OSX, 

@@ -4,7 +4,11 @@ apply plugin:'application'
 mainClassName = "net.snookr.Main"
 
 repositories {
-    mavenCentral()
+    // DL 2018-07-08 explicilty make insecure http, because of broken cert!
+    maven {
+        url "http://repo1.maven.org/maven2"
+    }
+    // mavenCentral() // uses https:
 }
 
 dependencies {
