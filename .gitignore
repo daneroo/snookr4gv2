@@ -1,4 +1,5 @@
 build
+data/
 .gradle
 # snookr.yap* Keep these
 # This is where I'll hold the SEKRET Credentials, and auth tokens
