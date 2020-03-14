@@ -61,15 +61,17 @@ class FixFlickrPostedDates implements Runnable {
                 println "Fix: ${flickrima.photoid} ${fmt.format(flickrima.taken)} ${fmt.format(flickrima.posted)}";
                 totalFlickrDatesToFix++;
 
-                if (totalFlickrDatesToFix<=100) {
-                    String rsp  = ff.setPostedDate(flickrima.photoid,flickrima.taken);
-                    println "";
-                    println rsp;
-                    println "";
-                }
+                // SetPosetDate can no longer be in the past?
+                // if (totalFlickrDatesToFix<=100000) {
+                //     String rsp  = ff.setPostedDate(flickrima.photoid,flickrima.taken);
+                //     println "";
+                //     println rsp;
+                //     println "";
+                // }
 
             }
         }
+        println "No longer possible to set date_posted 	<err code=\"4\" msg=\"Invalid date_posted\" />";
         println "total dates to fix:  ${totalFlickrDatesToFix} out of ${dbMapByPhotoid.size()}";
 
 
