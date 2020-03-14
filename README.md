@@ -7,7 +7,37 @@ Deprecated - can only use existing `build` directory, so I checked it in. see do
 - 2015-11-13: Figured out how to re-install JDK6 on OSX
 - 2015-11-12: Dockerizing, and upgrading to OAuth. Need to add GET/PUT to Flickr.groovy.get|post, and update inject and sign methods.
 
-Moved from Google Code
+## Docker
+
+This docker image allows us to compile the project with groovy/gradle under jdk1.6
+
+Had to start from a gradle image: `niaquinto/gradle`, but had to downgrade to `java:6-jdk` as a base image.
+This is because we need deprecated: `com.sun.image.codec.jpeg.JPEGDecodeParam`, used from `JpegMetadataReader.readMetadata`.
+
+The new version of graddle builds a bit differently.
+
+```bash
+// the name is derived from the directory name, hence app, instead of snookr4gv2
+docker build  -t daneroo/gradle .
+docker run --rm -it -v `pwd`:/usr/src/app:rw -v /Volumes/Space/archive:/archive daneroo/gradle
+
+# This no longer works!!!!
+# gradle clean installDist
+
+. ENV.sh
+# This still works
+./build/install/snookr4gv2/bin/snookr4gv2 --fli2db
+# Download no longer works, but lists the urls, which can be adjusted with https and fetched with curl!
+./build/install/snookr4gv2/bin/snookr4gv2 --fetch data/SnookrFetchDir/
+
+# Don;;t do this, no new content
+./build/install/snookr4gv2/bin/snookr4gv2 --push /archive/media/photo/
+./build/install/snookr4gv2/bin/snookr4gv2 --push ./imageExistTest/
+```
+
+## Legacy
+
+### Moved from Google Code
 
 Wrote the build with [gradle](http://www.gradle.org/documentation)
 
@@ -28,35 +58,7 @@ time ./build/install/snookr4gv2/bin/snookr4gv2 --fs2json /Volumes/DarwinTime/arc
 time ./build/install/snookr4gv2/bin/snookr4gv2 --push /Volumes/DarwinTime/archive/media/photo/
 ```
 
-## Docker
-
-This docker image allows us to compile the project with groovy/gradle under jdk1.6
-
-Had to start from a gradle image: `niaquinto/gradle`, but had to downgrade to `java:6-jdk` as a base image.
-This is because we need deprecated: `com.sun.image.codec.jpeg.JPEGDecodeParam`, used from `JpegMetadataReader.readMetadata`.
-
-The new version of graddle builds a bit differntly.
-
-```bash
-// the name is derived from the directory name, hence app, instead of snookr4gv2
-docker build  -t daneroo/gradle .
-docker run --rm -it -v `pwd`:/usr/src/app:rw -v /Volumes/Space/archive:/archive daneroo/gradle
-
-# This no longer works!!!!
-gradle clean installDist
-
-. ENV.sh 
-# This still works
-./build/install/snookr4gv2/bin/snookr4gv2 --fli2db
-# Download no longer works, but lists the urls, which can be adjusted with https and fetched with curl!
-./build/install/snookr4gv2/bin/snookr4gv2 --fetch data/SnookrFetchDir/
-
-./build/install/snookr4gv2/bin/snookr4gv2 --push /archive/media/photo/
-./build/install/snookr4gv2/bin/snookr4gv2 --push ./imageExistTest/
-./build/install/snookr4gv2/bin/snookr4gv2 --fetch data/SnookrFetchDir
-```
-
-## Setup
+### Setup
 
 On OSX,
   **actually I don't think I need groovy...**
