@@ -27,11 +27,14 @@ docker run --rm -it -v `pwd`:/usr/src/app:rw -v /Volumes/Space/archive:/archive 
 . ENV.sh
 # This still works
 ./build/install/snookr4gv2/bin/snookr4gv2 --fli2db
+./build/install/snookr4gv2/bin/snookr4gv2 --fs2db /archive/media/photo/
+
 # Download no longer works, but lists the urls, which can be adjusted with https and fetched with curl!
 ./build/install/snookr4gv2/bin/snookr4gv2 --fetch data/SnookrFetchDir/
 
-# Don;;t do this, no new content
+# Don't do this, no new content
 ./build/install/snookr4gv2/bin/snookr4gv2 --push /archive/media/photo/
+# Just an old test
 ./build/install/snookr4gv2/bin/snookr4gv2 --push ./imageExistTest/
 ```
 
